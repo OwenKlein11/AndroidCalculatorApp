@@ -1,4 +1,4 @@
-# Calculator App (Project #1)
+# Android Calculator App (Project #1)
 
 This project is a simple calculator app that allows users to perform basic arithmetic operations. Users can input numbers and operators to calculate results.
 
