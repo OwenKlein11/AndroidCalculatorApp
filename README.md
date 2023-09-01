@@ -11,13 +11,11 @@ The following **required** functionality is completed:
 * [ ] Users can clear the current input and start new calculations.
 * [ ] Users can toggle the sign of the current input.
 * [ ] Users can convert the current input into a decimal percentage.
-* [ ] Users are prevented from dividing by zero.
 
 The following **extensions** are implemented:
 
-* [ ] Users can see a history of previous calculations.
-* [ ] Users can use swipe gestures to clear the input.
-* [ ] Users can customize the app's theme.
+* [ ] Users are prevented from dividing by zero.
+* [ ] Numbers automatically round when off the screen
 
 ## Video Walkthrough
 
