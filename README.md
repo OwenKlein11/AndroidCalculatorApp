@@ -21,7 +21,7 @@ The following **extensions** are implemented:
 
 Here's a walkthrough of the implemented user stories:
 
-<img src='Project1Walkthrough.gif' title='Video Walkthrough' width='50%' alt='Video Walkthrough' />
+<img src='Project1Walkthrough.gif' title='Video Walkthrough' width='20%' alt='Video Walkthrough' />
 
 
 ## Notes
