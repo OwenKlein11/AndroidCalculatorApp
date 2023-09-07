@@ -1,11 +1,18 @@
 package com.example.calculatorappp1
 
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import java.text.DecimalFormat
+import kotlin.math.cos
+import kotlin.math.ln
+import kotlin.math.log10
+import kotlin.math.sin
+import kotlin.math.tan
 
 // Int: current total, stores total of equation, when operator is clicked, then used to operate
 var currentTotal = 0.0
@@ -37,6 +44,12 @@ class MainActivity : AppCompatActivity() {
         val subButton = findViewById<Button>(R.id.bSubtract)
         val addButton = findViewById<Button>(R.id.bAdd)
         val equalsButton = findViewById<Button>(R.id.bEquals)
+
+        val sinButton = findViewById<Button>(R.id.bSin)
+        val cosButton = findViewById<Button>(R.id.bCos)
+        val tanButton = findViewById<Button>(R.id.bTan)
+        val log10Button = findViewById<Button>(R.id.bLog10)
+        val lnButton = findViewById<Button>(R.id.bLn)
 
         val calcText = findViewById<TextView>(R.id.tvResult)
 
@@ -71,6 +84,8 @@ class MainActivity : AppCompatActivity() {
             currentOperator = ""
             ifPossible = true
             updateScreen(calcText)
+
+            Log.i("CalculatorApp", "Button Clicked: clear")
         }
 
         // handles when negPos button is clicked
@@ -79,6 +94,7 @@ class MainActivity : AppCompatActivity() {
                 currentInput *= -1
             }
             updateScreen(calcText)
+            Log.i("CalculatorApp", "Button Clicked: =")
         }
 
         // handles when modButton button is clicked
@@ -86,6 +102,7 @@ class MainActivity : AppCompatActivity() {
             val inputDouble = currentInput
             currentInput = inputDouble / 100
             updateScreen(calcText)
+            Log.i("CalculatorApp", "Button Clicked: %")
         }
 
         // handles when add button is clicked
@@ -94,6 +111,7 @@ class MainActivity : AppCompatActivity() {
             currentInput = 0.0
 
             currentOperator += "+"
+            Log.i("CalculatorApp", "Button Clicked: +")
         }
 
         // handles when sub button is clicked
@@ -102,6 +120,7 @@ class MainActivity : AppCompatActivity() {
             currentInput = 0.0
 
             currentOperator += "-"
+            Log.i("CalculatorApp", "Button Clicked: -")
         }
 
         // handles when multiplication button is clicked
@@ -110,6 +129,7 @@ class MainActivity : AppCompatActivity() {
             currentInput = 0.0
 
             currentOperator += "x"
+            Log.i("CalculatorApp", "Button Clicked: x")
         }
 
         // handles when div button is clicked
@@ -118,6 +138,7 @@ class MainActivity : AppCompatActivity() {
             currentInput = 0.0
 
             currentOperator += "/"
+            Log.i("CalculatorApp", "Button Clicked: /")
         }
 
         // handles when equals button is clicked
@@ -125,6 +146,47 @@ class MainActivity : AppCompatActivity() {
             equals()
             currentOperator = ""
             updateScreen(calcText)
+            Log.i("CalculatorApp", "Button Clicked: =")
+        }
+
+        // handles when sin button is clicked
+        sinButton?.setOnClickListener {
+            val inputDouble = currentInput
+            currentInput = sin(inputDouble)
+            updateScreen(calcText)
+            Log.i("CalculatorApp", "Button Clicked: sin")
+        }
+
+        // handles when cos button is clicked
+        cosButton?.setOnClickListener {
+            val inputDouble = currentInput
+            currentInput = cos(inputDouble)
+            updateScreen(calcText)
+            Log.i("CalculatorApp", "Button Clicked: cos")
+        }
+
+        // handles when tan button is clicked
+        tanButton?.setOnClickListener {
+            val inputDouble = currentInput
+            currentInput = tan(inputDouble)
+            updateScreen(calcText)
+            Log.i("CalculatorApp", "Button Clicked: tan")
+        }
+
+        // handles when log10 button is clicked
+        log10Button?.setOnClickListener {
+            val inputDouble = currentInput
+            currentInput = log10(inputDouble)
+            updateScreen(calcText)
+            Log.i("CalculatorApp", "Button Clicked: log 10")
+        }
+
+        // handles when ln button is clicked
+        lnButton?.setOnClickListener {
+            val inputDouble = currentInput
+            currentInput = ln(inputDouble)
+            updateScreen(calcText)
+            Log.i("CalculatorApp", "Button Clicked: ln")
         }
 
 
@@ -132,22 +194,20 @@ class MainActivity : AppCompatActivity() {
 
     // takes in button and turns it into string, appending it by running appendToInput function
     fun onNumButtonClick(button: Button) {
-
         ifPossible = true
         val buttonText = button.text.toString()
 
         if (buttonText == "." && !hasClickedPoint && !formatNumber(currentInput).contains(".")) {
-            // when the point button is clicked and theres not already a point in the input, this runs
             hasClickedPoint = true
             appendPoint()
         } else if (buttonText != "." && beforePoint.contains(".")) {
-            // when there is no decimal, this runs, continues like normal
             appendToPoint(buttonText)
-        } else if (buttonText != "."){
-            // when there is already a point in the input, but another number needs to be appended
+        } else if (buttonText != ".") {
             appendToInput(buttonText)
         }
 
+        // adds a log statement to track number button clicks
+        Log.i("CalculatorApp", "Button Clicked: $buttonText")
     }
 
 
@@ -175,6 +235,34 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        // saves the needed data to use later when the orientation flips in the Bundle
+        outState.putDouble("currentTotal", currentTotal)
+        outState.putDouble("currentInput", currentInput)
+        outState.putString("currentOperator", currentOperator)
+        outState.putBoolean("ifPossible", ifPossible)
+        outState.putBoolean("hasClickedPoint", hasClickedPoint)
+        outState.putString("beforePoint", beforePoint)
+    }
+
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        // restores the saved data from the Bundle
+        currentTotal = savedInstanceState.getDouble("currentTotal")
+        currentInput = savedInstanceState.getDouble("currentInput")
+        currentOperator = savedInstanceState.getString("currentOperator") ?: ""
+        ifPossible = savedInstanceState.getBoolean("ifPossible")
+        hasClickedPoint = savedInstanceState.getBoolean("hasClickedPoint")
+        beforePoint = savedInstanceState.getString("beforePoint") ?: "0"
+
+        // update the screen with the data from before
+        updateScreen(findViewById(R.id.tvResult))
+    }
+
     // appends number onto input, runs when number/. is clicked after another number/.
     fun appendToInput(buttonText: String) {
         if (buttonText == ".") {
@@ -198,6 +286,11 @@ class MainActivity : AppCompatActivity() {
     fun appendToPoint(buttonText: String) {
         currentInput = (beforePoint + buttonText).toDouble()
         beforePoint = "0"
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        // Handle orientation change if needed
     }
 
     // run when equals sign is clicked, checks operator and completes operation, updating currentInput
