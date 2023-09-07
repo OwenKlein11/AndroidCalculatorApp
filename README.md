@@ -25,7 +25,7 @@ The following **extensions** are implemented:
 
 Here's a walkthrough of the implemented user stories:
 
-<img src='Project1Walkthrough.gif' title='Video Walkthrough' width='30%' alt='Video Walkthrough' />
+<img src='CalculatorAppP2.gif' title='Video Walkthrough' width='30%' alt='Video Walkthrough' />
 
 
 ## Notes
